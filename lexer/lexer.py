@@ -1,6 +1,6 @@
-from my_token import Token, TokenType
-from dfa import DFA
-from symbol_table import SymbolTable
+from .my_token import Token, TokenType
+from .dfa import DFA
+from .symbol_table import SymbolTable
 import string
 
 
@@ -44,9 +44,9 @@ class Lexer:
                         # TODO: 判断是否为关键字或标识符
                         return SymbolTable.lookup(lexeme)
                     elif self.dfa.curr_state.name == 'NUMBER':
-                        return Token(TokenType.CONST, lexeme)
+                        return Token(TokenType.CONST, lexeme, func_ptr=int)
                     elif self.dfa.curr_state.name == 'POINT':
-                        return Token(TokenType.CONST, lexeme)
+                        return Token(TokenType.CONST, lexeme, func_ptr=float)
                     elif self.dfa.curr_state.name == 'MUL':
                         return Token(TokenType.MUL, lexeme)
                     elif self.dfa.curr_state.name == '/':
@@ -82,9 +82,9 @@ class Lexer:
                             # TODO: 判断是否为关键字或标识符
                             return SymbolTable.lookup(lexeme)
                         elif self.dfa.curr_state.name == 'NUMBER':
-                            return Token(TokenType.CONST, lexeme)
+                            return Token(TokenType.CONST, lexeme, func_ptr=int)
                         elif self.dfa.curr_state.name == 'POINT':
-                            return Token(TokenType.CONST, lexeme)
+                            return Token(TokenType.CONST, lexeme, func_ptr=float)
                         elif self.dfa.curr_state.name == 'MUL':
                             return Token(TokenType.MUL, lexeme)
                         elif self.dfa.curr_state.name == '/':
@@ -93,9 +93,11 @@ class Lexer:
                             return Token(TokenType.MINUS, lexeme)
                 else:  # 未到达终点，加入词素
                     lexeme += curr_char  # 加入词素
+            ''' # 调试信息
             print(f"当前状态：{self.dfa.curr_state.name}，\t当前字符：{repr(curr_char)}，"
                   f"\t分类：{curr_char_class}；\t词素：{repr(lexeme)}，"
                   f"\t下一个状态：{next_state.name if next_state else 'None'}")
+                  '''
             self.dfa.curr_state = next_state  # 更新状态机状态
 
     # 输入字符串进行分类
@@ -120,6 +122,13 @@ class Lexer:
             self.dfa.curr_state = self.dfa.start_state  # 重置状态机状态
             token = self.get_token()
             if token:
-                print(f"Token：{token}")
+                # print(f"Token：{token}")   # 打印Token
                 self.tokens.append(token)
+
+        # 打印Token
+        print("Token列表：")
+        for token in self.tokens:
+            print(token)
+
+        print(f"词法分析结束，共生成{len(self.tokens)}个Token。")
         return self.tokens

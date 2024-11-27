@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class TokenType(Enum):
-    # 定义Token的类别
+    # 注释，保留字，参数名T
     COMMENT = 0  # 注释
     ORIGIN = 1  # 原点
     SCALE = 2  # 缩放
@@ -35,12 +35,11 @@ class TokenType(Enum):
 
 
 class Token:
-    def __init__(self, type_: TokenType, lexeme: str, value: float = None, func_ptr=None):
+    def __init__(self, type_: TokenType, lexeme: str, func_ptr=None):
         self.type = type_       # Token类型
         self.lexeme = lexeme    # 原始字符串
-        self.value = value      # Token值
         self.func_ptr = func_ptr  # 函数指针，指向数学函数（如sin, cos等）
 
     def __repr__(self):
-        # 打印Token信息：类型，词素，值，函数指针
-        return f"{self.type}, \n{self.lexeme}, \t{self.value}, \t{self.func_ptr}"
+        # 打印Token信息：类型，词素, 函数指针
+        return f"{self.type}, \t{self.lexeme}, \t{self.func_ptr}"
