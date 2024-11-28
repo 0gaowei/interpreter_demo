@@ -7,7 +7,7 @@ class ASTNode:
     def __repr__(self, level=0):
         """递归地打印AST树"""
         indent = "     " * level    # 缩进
-        result = f"{indent}{self.node_type}: {self.value}"
+        result = f"{indent}node_type: {self.node_type}, value: {self.value}"
         if self.children:
             result += "\n"
             for child in self.children:

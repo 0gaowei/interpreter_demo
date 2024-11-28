@@ -31,9 +31,10 @@ class Parser:
 
     def parse_program(self) -> ASTNode:
         """解析程序 Program → { Statement SEMICO }"""
+        print("语法分析开始...")
         statements = []
         while self.current_token():
-            print("\nP A R S E _ P R O G R A M\n")
+            print("P A R S E _ P R O G R A M")
             print(self.current_token())
             if self.current_token().type == TokenType.COMMENT:
                 # 忽略注释
@@ -41,73 +42,105 @@ class Parser:
                 continue
             statements.append(self.parse_statement())
             self.match(TokenType.SEMICO)  # 每个语句以分号结束
+        print("语法分析结束...")
         return ASTNode("Program", children=statements)
 
     def parse_statement(self):
         """解析语句 Statement → OriginStatement | ScaleStatement | ForStatement | RotStatement"""
-        print("\n\tP A R S E _ S T A T E M E N T\n")
+        print("\tP A R S E _ S T A T E M E N T")
         token = self.current_token()
         # print("\tstart token:", token)
         if token.type == TokenType.ORIGIN:
-            print("\n\t\tP A R S E _ O R I G I N _ S T A T E M E N T\n")
+            print("\t\tP A R S E _ O R I G I N _ S T A T E M E N T")
             return self.parse_origin_statement()
         elif token.type == TokenType.SCALE:
-            print("\n\t\tP A R S E _ S C  A L E _ S T A T E M E N T\n")
+            print("\t\tP A R S E _ S C  A L E _ S T A T E M E N T")
             return self.parse_scale_statement()
         elif token.type == TokenType.ROT:
-            print("\n\t\tP A R S E _ R O T _ S T A T E M E N T\n")
+            print("\t\tP A R S E _ R O T _ S T A T E M E N T")
             return self.parse_rot_statement()
         elif token.type == TokenType.FOR:
-            print("\n\t\tP A R S E _ F O R _ S T A T E M E N T\n")
+            print("\t\tP A R S E _ F O R _ S T A T E M E N T")
             return self.parse_for_statement()
         else:
             self.error("Invalid statement")
 
     def parse_origin_statement(self):
         """OriginStatement → ORIGIN IS L_BRACKET Expression COMMA Expression R_BRACKET"""
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.ORIGIN)
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.IS)
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.L_BRACKET)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         expr1 = self.parse_expression()
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.COMMA)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         expr2 = self.parse_expression()
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.R_BRACKET)
         return ASTNode("OriginStatement", children=[expr1, expr2])
 
     def parse_scale_statement(self):
         """ScaleStatement → SCALE IS L_BRACKET Expression COMMA Expression R_BRACKET"""
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.SCALE)
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.IS)
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.L_BRACKET)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         expr1 = self.parse_expression()
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.COMMA)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         expr2 = self.parse_expression()
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.R_BRACKET)
         return ASTNode("ScaleStatement", children=[expr1, expr2])
 
     def parse_rot_statement(self):
         """RotStatement → ROT IS Expression"""
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.ROT)
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.IS)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         expr = self.parse_expression()
         return ASTNode("RotStatement", children=[expr])
 
     def parse_for_statement(self):
         """ForStatement → FOR T FROM Expression TO Expression STEP Expression
                             DRAW L_BRACKET Expression COMMA Expression R_BRACKET"""
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.FOR)
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         loop_var = self.match(TokenType.T)
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.FROM)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         start_expr = self.parse_expression()
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.TO)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         end_expr = self.parse_expression()
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.STEP)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         step_expr = self.parse_expression()
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.DRAW)
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.L_BRACKET)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         draw_x = self.parse_expression()
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.COMMA)
+        print(f"\t\t\t{self.current_token().type}, matching...")
         draw_y = self.parse_expression()
+        print(f"\t\t\t{self.current_token().lexeme}, matching...")
         self.match(TokenType.R_BRACKET)
         return ASTNode("ForStatement", children=[
             ASTNode("LoopVar", value=loop_var.lexeme),
@@ -155,7 +188,10 @@ class Parser:
         """Atom → CONST_ID | T | FUNC L_BRACKET Expression R_BRACKET | L_BRACKET Expression R_BRACKET"""
         token = self.current_token()
         if token.type == TokenType.CONST:
-            return ASTNode("Constant", value=self.match(TokenType.CONST).func_ptr)
+            curr_token = self.match(TokenType.CONST)
+            if not curr_token.func_ptr:
+                return ASTNode("Constant", value=float(curr_token.lexeme))
+            return ASTNode("Constant", value=curr_token.func_ptr)
         elif token.type == TokenType.T:
             return ASTNode("Variable", value=self.match(TokenType.T).lexeme)
         elif token.type == TokenType.FUNC:
@@ -163,7 +199,7 @@ class Parser:
             self.match(TokenType.L_BRACKET)
             expr = self.parse_expression()
             self.match(TokenType.R_BRACKET)
-            return ASTNode("FunctionCall", value=func.lexeme, children=[expr])
+            return ASTNode("FunctionCall", value=func.func_ptr, children=[expr])
         elif token.type == TokenType.L_BRACKET:
             self.match(TokenType.L_BRACKET)
             expr = self.parse_expression()

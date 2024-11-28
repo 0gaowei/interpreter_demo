@@ -44,9 +44,9 @@ class Lexer:
                         # TODO: 判断是否为关键字或标识符
                         return SymbolTable.lookup(lexeme)
                     elif self.dfa.curr_state.name == 'NUMBER':
-                        return Token(TokenType.CONST, lexeme, func_ptr=int)
+                        return Token(TokenType.CONST, lexeme)
                     elif self.dfa.curr_state.name == 'POINT':
-                        return Token(TokenType.CONST, lexeme, func_ptr=float)
+                        return Token(TokenType.CONST, lexeme)
                     elif self.dfa.curr_state.name == 'MUL':
                         return Token(TokenType.MUL, lexeme)
                     elif self.dfa.curr_state.name == '/':
@@ -82,9 +82,9 @@ class Lexer:
                             # TODO: 判断是否为关键字或标识符
                             return SymbolTable.lookup(lexeme)
                         elif self.dfa.curr_state.name == 'NUMBER':
-                            return Token(TokenType.CONST, lexeme, func_ptr=int)
+                            return Token(TokenType.CONST, lexeme)
                         elif self.dfa.curr_state.name == 'POINT':
-                            return Token(TokenType.CONST, lexeme, func_ptr=float)
+                            return Token(TokenType.CONST, lexeme)
                         elif self.dfa.curr_state.name == 'MUL':
                             return Token(TokenType.MUL, lexeme)
                         elif self.dfa.curr_state.name == '/':
